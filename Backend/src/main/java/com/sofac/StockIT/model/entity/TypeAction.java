@@ -1,4 +1,4 @@
-package com.sofac.StockIT.model;
+package com.sofac.StockIT.model.entity;
 
 public enum TypeAction {
     CREATE,

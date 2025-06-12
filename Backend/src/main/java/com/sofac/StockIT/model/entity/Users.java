@@ -1,4 +1,4 @@
-package com.sofac.StockIT.model;
+package com.sofac.StockIT.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;

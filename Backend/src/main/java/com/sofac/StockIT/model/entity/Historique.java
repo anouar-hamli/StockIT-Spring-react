@@ -1,4 +1,4 @@
-package com.sofac.StockIT.model;
+package com.sofac.StockIT.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -31,7 +31,7 @@ public class Historique {
     private TypeAction typeAction;
 
     @Column(name = "serial_number")
-    private String serialNumber;
+    private String numeroSerie;
 
     @Column(name = "old_destination")
     private String oldDestination;
@@ -52,6 +52,6 @@ public class Historique {
     @Column(name = "action_by", nullable = false)
     private String actionBy;
 
-    @Column(name = "date_action")
+    @Column(name = "date_action",nullable = false)
     private LocalDateTime dateAction;
 }

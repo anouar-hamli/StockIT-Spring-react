@@ -1,4 +1,4 @@
-package com.sofac.StockIT.model;
+package com.sofac.StockIT.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,17 +22,17 @@ public class Produit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_produit")
-    private long produit;
+    private long idproduit;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "type_materiel", nullable = false)
-    private Category type_materiel;
+    private Category typeMateriel;
 
     @Column(name = "reference", nullable = false)
     private String reference;
 
     @Column(name = "numero_serie", nullable = false, unique = true)
-    private String numero_serie;
+    private String numeroSerie;
 
     @Column(name = "destination", nullable = false)
     private String destination;
@@ -41,17 +41,18 @@ public class Produit {
     private String motif;
 
     @Column(name = "date_acquisition", nullable = false)
-    private String date_acquisition;
+    private LocalDate dateAcquisition;
 
     @Column(name = "affectation", nullable = false)
     private String affectation;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "statut_produit", nullable = false)
-    private StatusProduit statut_produit;
+    private StatusProduit statutProduit;
 
-    @Column(name = "is_deleted",nullable = false)
-    private Boolean is_deleted=false;
+    @Column(name = "is_deleted", nullable = false)
+    private Boolean isDeleted = false;
+
 
     @OneToMany(mappedBy = "produit",cascade = {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.REFRESH})
     private List<Historique> historiques = new ArrayList<>();
@@ -60,23 +61,23 @@ public class Produit {
         this.historiques.add(historique);
         historique.setProduit(this);
     }
-    public void sauvegarderHistorique(TypeAction typeAction,String actionBy){
+    public void sauvegarderHistorique(TypeAction typeAction, String actionBy){
         Historique historique = new Historique();
         historique.setProduit(this);
         historique.setTypeAction(typeAction);
-        historique.setSerialNumber(this.numero_serie);
+        historique.setNumeroSerie(this.numeroSerie);
         historique.setOldDestination(this.destination);
         historique.setOldMotif(this.motif);
-        historique.setOldDateAcquisition(LocalDate.parse(this.date_acquisition));
+        historique.setOldDateAcquisition(this.dateAcquisition);
         historique.setOldAffectation(this.affectation);
-        historique.setOldStatutProduit(this.statut_produit);
+        historique.setOldStatutProduit(this.statutProduit);
         historique.setActionBy(actionBy);
         historique.setDateAction(LocalDateTime.now());
 
         this.addHistorique(historique);
     }
     public void softDeleted() {
-        this.is_deleted=true;
+        this.isDeleted=true;
         this.sauvegarderHistorique(TypeAction.DELETE,"system");
     }
 }
