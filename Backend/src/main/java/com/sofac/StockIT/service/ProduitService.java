@@ -6,6 +6,7 @@ import com.sofac.StockIT.model.entity.Category;
 import com.sofac.StockIT.model.entity.Produit;
 import com.sofac.StockIT.model.entity.StatusProduit;
 import com.sofac.StockIT.model.entity.TypeAction;
+import com.sofac.StockIT.model.mapper.EnumMapper;
 import com.sofac.StockIT.model.mapper.ProduitMapper;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -104,5 +105,12 @@ public class ProduitService {
         return produitRepository.findByNumeroSerieAndIsDeletedFalse(numeroSerie)
                 .map(produitMapper::toDto)
                 .orElseThrow(() -> new RuntimeException("Product not found"));
+    }
+    @Transactional(readOnly = true)
+    public List<ProduitDto> findByTypeMateriel(Category category) {
+        return produitRepository.findByTypeMateriel(category)
+                .stream()
+                .map(produitMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

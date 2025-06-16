@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +54,20 @@ public class ProduitController {
             @RequestParam(required = false) StatusProduit status,
             @RequestParam(required = false) Category category) {
         return produitService.searchProduits(numeroSerie, status, category);
+    }
+    @GetMapping("/by-category")
+    public ResponseEntity<List<ProduitDto>> getProduitsByCategory(@RequestParam Category typeMateriel) {
+        List<ProduitDto> produits = produitService.findByTypeMateriel(typeMateriel);
+
+        if(produits.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok(produits);
+    }
+    @GetMapping("/category")
+    public ResponseEntity<List<Category>> getProduitsByCategory(){
+        return ResponseEntity.ok(Arrays.asList(Category.values()));
     }
 
 }
