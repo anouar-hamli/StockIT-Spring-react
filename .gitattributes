@@ -1,0 +1,32 @@
+# ==============================================
+# CONFIGURATION DES FINS DE LIGNE (LINE ENDINGS)
+# ==============================================
+
+# Règle par défaut - Détection automatique
+* text=auto
+
+# Fichiers sources (toujours LF)
+*.java text eol=lf
+*.kt text eol=lf
+*.xml text eol=lf
+*.properties text eol=lf
+*.yml text eol=lf
+*.json text eol=lf
+
+# Fichiers de build
+pom.xml text eol=lf
+build.gradle text eol=lf
+
+# Documentation
+*.md text eol=lf
+*.adoc text eol=lf
+
+# Scripts Windows (doivent garder CRLF)
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# Fichiers binaires (pas de conversion)
+*.jar binary
+*.war binary
+*.png binary
+*.jpg binary
