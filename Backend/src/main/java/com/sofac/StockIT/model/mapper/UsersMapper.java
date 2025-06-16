@@ -25,5 +25,5 @@ public interface UsersMapper {
     Users toEntity(UsersDto dto);
 
     @Mapping(target = "motDePasse", ignore = true)
-    AdminsDto toAdminsDto(Admins entity);
+    AdminsDto toAdminsDto(Admins entity);   
 }

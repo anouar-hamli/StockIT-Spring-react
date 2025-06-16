@@ -28,8 +28,6 @@ public class ProduitDto {
     private List<HistoriqueDto> historiques;
     private String fullReference;
 
-//    public String getFullReference() {
-//        return typeMateriel + "-" + reference;
-//    }
+
 
 }
