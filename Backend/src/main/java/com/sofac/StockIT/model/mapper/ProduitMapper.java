@@ -5,7 +5,6 @@ import com.sofac.StockIT.model.dto.ProduitDto;
 import com.sofac.StockIT.model.entity.Produit;
 import org.mapstruct.*;
 
-import java.util.List;
 
 
 @Mapper(config = MapStructConfig.class,

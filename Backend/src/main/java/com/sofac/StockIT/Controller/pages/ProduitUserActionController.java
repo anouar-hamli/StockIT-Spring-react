@@ -1,4 +1,4 @@
-package com.sofac.StockIT.Controller;
+package com.sofac.StockIT.Controller.pages;
 
 public class ProduitUserActionController {
 }
