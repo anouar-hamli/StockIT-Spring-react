@@ -20,5 +20,6 @@ public class ProduitUserActionDto {
     private UsersDto user;
     private TypeAction typeAction;
     private LocalDateTime dateAction;
+    private String description;
 
 }

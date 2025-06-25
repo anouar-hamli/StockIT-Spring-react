@@ -61,7 +61,7 @@ public class Produit {
         this.historiques.add(historique);
         historique.setProduit(this);
     }
-    public void sauvegarderHistorique(TypeAction typeAction, String actionBy){
+    public void sauvegarderHistorique(TypeAction typeAction){
         Historique historique = new Historique();
         historique.setProduit(this);
         historique.setTypeAction(typeAction);
@@ -71,13 +71,12 @@ public class Produit {
         historique.setOldDateAcquisition(this.dateAcquisition);
         historique.setOldAffectation(this.affectation);
         historique.setOldStatutProduit(this.statutProduit);
-        historique.setActionBy(actionBy);
         historique.setDateAction(LocalDateTime.now());
 
         this.addHistorique(historique);
     }
     public void softDeleted() {
         this.isDeleted=true;
-        this.sauvegarderHistorique(TypeAction.DELETE,"system");
+        this.sauvegarderHistorique(TypeAction.DELETE);
     }
 }

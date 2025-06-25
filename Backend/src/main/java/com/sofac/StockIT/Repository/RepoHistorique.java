@@ -13,9 +13,8 @@ import java.util.List;
 public interface RepoHistorique extends JpaRepository<Historique, Long> {
     @Query("SELECT h FROM Historique h WHERE h.produit.idproduit = :produitId")
     List<Historique> findByProduitId(@Param("produitId") Long produitId);
-
-
-    List<Historique> findByUserId(Long userId);
-    List<Historique> findByTypeAction(TypeAction typeAction);
+    List<Historique> findByProduitIdproduitOrderByDateActionDesc(Long idproduit);
+    //List<Historique> findByTypeAction(TypeAction typeAction);
+    //List<Historique> findByActionBy(String username);
 }
 

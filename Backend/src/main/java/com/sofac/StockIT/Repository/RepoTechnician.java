@@ -5,5 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RepoTechnician extends JpaRepository<Technician, Integer> {
+public interface RepoTechnician extends JpaRepository<Technician, Long> {
+    boolean existsByEmail(String email);
+
+    Technician findByEmail(String email);
 }

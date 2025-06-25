@@ -49,8 +49,6 @@ public class Historique {
     @Column(name = "old_statut_produit")
     private StatusProduit oldStatutProduit;
 
-    @Column(name = "action_by", nullable = false)
-    private String actionBy;
 
     @Column(name = "date_action",nullable = false)
     private LocalDateTime dateAction;

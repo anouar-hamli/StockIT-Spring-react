@@ -33,4 +33,14 @@ public class ProduitUserAction {
 
     @Column(name = "dateAction", nullable = false)
     private LocalDateTime dateAction = LocalDateTime.now();
+    @PrePersist
+    public void prePersist() {
+        if (this.dateAction == null) {
+            this.dateAction = LocalDateTime.now();
+        }
+    }
+
+    @Column(name = "description", length = 255)
+    private String description;
+
 }

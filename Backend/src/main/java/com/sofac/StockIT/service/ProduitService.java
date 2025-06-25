@@ -61,8 +61,6 @@ public class ProduitService {
         historique.setOldDateAcquisition(produit.getDateAcquisition());
         historique.setOldAffectation(produit.getAffectation());
         historique.setOldStatutProduit(produit.getStatutProduit());
-
-        historique.setActionBy(actionBy);
         historique.setDateAction(LocalDateTime.now());
 
         historiqueRepository.save(historique);

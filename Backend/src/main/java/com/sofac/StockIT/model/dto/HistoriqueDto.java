@@ -24,7 +24,6 @@ public class HistoriqueDto {
     private LocalDate oldDateAcquisition;
     private String oldAffectation;
     private StatusProduit oldStatutProduit;
-    private String actionBy;
     private LocalDateTime dateAction;
 
 }
