@@ -10,8 +10,5 @@ import lombok.experimental.SuperBuilder;
 public class TechnicianDto extends UsersDto{
     private String department;
 
-    public boolean canViewProducts() { return true; }
-    public boolean canAddProducts() { return true; }
-    public boolean canEditProducts() { return false; }
-    public boolean canDeleteProducts() { return false; }
+    private boolean canAccessAdminPanel = false;
 }

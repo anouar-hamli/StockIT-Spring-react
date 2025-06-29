@@ -17,8 +17,5 @@ import lombok.Setter;
 public class Technician extends Users {
     @Column(length = 255, nullable = false)
     private String department;
-    public boolean canViewProducts() { return true; }
-    public boolean canAddProducts() { return true; }
-    public boolean canEditProducts() { return false; }
-    public boolean canDeleteProducts() { return false; }
+    private boolean canAccessAdminPanel = false;
 }

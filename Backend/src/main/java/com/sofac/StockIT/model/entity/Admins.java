@@ -19,9 +19,6 @@ public class Admins extends Users {
     private boolean isSuperAdmin = true;
 
 
-    public boolean canViewProducts() { return true; }
-    public boolean canAddProducts() { return true; }
-    public boolean canEditProducts() { return true; }
-    public boolean canDeleteProducts() { return true; }
+    private boolean canAccessAdminPanel = true;
 
 }
