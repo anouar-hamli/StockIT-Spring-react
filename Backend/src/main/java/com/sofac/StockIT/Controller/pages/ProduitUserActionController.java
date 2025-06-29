@@ -6,6 +6,9 @@ import com.sofac.StockIT.service.ProduitUserActionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,50 +22,54 @@ public class ProduitUserActionController {
 
     private final ProduitUserActionService actionService;
 
-    @PostMapping("/log")
-    @Operation(summary = "Log a new user action on a product")
-    public ResponseEntity<Void> logUserAction(
-            @RequestParam Long userId,
-            @RequestParam Long produitId,
-            @RequestParam TypeAction actionType) {
-
+    @PostMapping("/log/{userId}/{produitId}/{actionType}")
+    @Operation(summary = "Log a product action")
+    public ResponseEntity<Void> logAction(
+            @PathVariable Long userId,
+            @PathVariable Long produitId,
+            @PathVariable TypeAction actionType) {
         actionService.logUserAction(userId, produitId, actionType);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping
-    @Operation(summary = "Get all product user actions for display in table")
-    public ResponseEntity<List<ProduitUserActionDto>> getAllActionsForTable() {
-        return ResponseEntity.ok(actionService.getAllActionsForTable());
+    @Operation(summary = "Get all product actions with pagination")
+    public ResponseEntity<Page<ProduitUserActionDto>> getAllActions(
+            @PageableDefault(size = 20) Pageable pageable) {
+        return ResponseEntity.ok(actionService.getAllActions(pageable));
     }
 
     @GetMapping("/by-serial/{serialNumber}")
-    @Operation(summary = "Get all actions by product serial number")
-    public ResponseEntity<List<ProduitUserActionDto>> getActionsByProductSerial(
+    @Operation(summary = "Get actions by product serial number")
+    public ResponseEntity<List<ProduitUserActionDto>> getBySerialNumber(
             @PathVariable String serialNumber) {
-
         return ResponseEntity.ok(actionService.findByProductSerialNumber(serialNumber));
     }
 
-    @GetMapping("/filter")
-    @Operation(summary = "Filter actions by user name, serial number, and/or action type")
-    public ResponseEntity<List<ProduitUserActionDto>> filterActions(
-            @RequestParam(required = false) String userName,
-            @RequestParam(required = false) String serialNumber,
-            @RequestParam(required = false) TypeAction actionType) {
+    @GetMapping("/by-user-and-serial/{userName}/{serialNumber}")
+    @Operation(summary = "Get actions by user name and product serial number")
+    public ResponseEntity<List<ProduitUserActionDto>> getByUserAndSerial(
+            @PathVariable String userName,
+            @PathVariable String serialNumber) {
+        return ResponseEntity.ok(actionService.findByUserNameAndSerialNumber(userName, serialNumber));
+    }
 
-        if (userName != null && serialNumber != null && actionType != null) {
-            return ResponseEntity.ok(
-                    actionService.findByUserNameAndSerialNumberAndActionType(
-                            userName, serialNumber, actionType));
-        } else if (userName != null && serialNumber != null) {
-            return ResponseEntity.ok(
-                    actionService.findByUserNameAndSerialNumber(userName, serialNumber));
-        } else if (serialNumber != null) {
-            return ResponseEntity.ok(
-                    actionService.findByProductSerialNumber(serialNumber));
-        } else {
-            return ResponseEntity.badRequest().build();
-        }
+    @GetMapping("/filtered/{userName}/{serialNumber}/{actionType}")
+    @Operation(summary = "Get filtered actions by user, serial number and action type")
+    public ResponseEntity<List<ProduitUserActionDto>> getFilteredActions(
+            @PathVariable String userName,
+            @PathVariable String serialNumber,
+            @PathVariable TypeAction actionType) {
+        return ResponseEntity.ok(actionService.findByUserNameAndSerialNumberAndActionType(
+                userName, serialNumber, actionType));
+    }
+
+    @PostMapping("/bulk-log")
+    @Operation(summary = "Log actions for multiple products")
+    public ResponseEntity<Void> logBulkActions(
+            @RequestParam List<Long> produitIds,
+            @RequestParam TypeAction actionType) {
+        actionService.logBulkActions(produitIds, actionType);
+        return ResponseEntity.ok().build();
     }
 }

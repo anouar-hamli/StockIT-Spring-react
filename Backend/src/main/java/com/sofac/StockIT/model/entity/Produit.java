@@ -1,5 +1,6 @@
 package com.sofac.StockIT.model.entity;
 
+import com.sofac.StockIT.listeners.ProduitListener;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,6 +18,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "Produit")
+@EntityListeners(ProduitListener.class)
 public class Produit {
 
     @Id
