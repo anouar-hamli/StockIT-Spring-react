@@ -3,13 +3,19 @@ package com.sofac.StockIT.Controller.pages;
 import com.sofac.StockIT.model.dto.AdminsDto;
 import com.sofac.StockIT.model.dto.TechnicianDto;
 import com.sofac.StockIT.model.dto.UsersDto;
+import com.sofac.StockIT.model.mapper.UsersMapper;
 import com.sofac.StockIT.service.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageConversionException;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -18,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UsersController {
     private final UsersService usersService;
+    private final UsersMapper usersMapper;
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
@@ -56,30 +63,37 @@ public class UsersController {
         return ResponseEntity.ok(usersService.getTechnicianById(id));
     }
 
-    @PostMapping("/admins")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<AdminsDto> createAdmin(@RequestBody AdminsDto adminDto) {
-        return ResponseEntity.ok(usersService.createAdmin(adminDto));
-    }
-
+//    @PostMapping("/admins")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<AdminsDto> createAdmin(@RequestBody AdminsDto adminDto) {
+//        return ResponseEntity.ok(usersService.createAdmin(adminDto));
+//    }
+//
+    // Create Technician
     @PostMapping("/technicians")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TechnicianDto> createTechnician(@RequestBody TechnicianDto technicianDto) {
-        return ResponseEntity.ok(usersService.createTechnician(technicianDto));
+    @Operation(summary = "Create a new technician",
+            description = "Requires ADMIN role. Password must be at least 8 chars with uppercase, lowercase, number and special char")
+    public ResponseEntity<TechnicianDto> createTechnician(
+            @Valid @RequestBody TechnicianDto technicianDto) {
+        TechnicianDto createdTech = usersService.createTechnician(technicianDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTech);
     }
-    @PostMapping("/create")
-    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<UsersDto> createUser(@RequestBody UsersDto userDto) {
-        if (userDto instanceof AdminsDto) {
-            AdminsDto adminDto = (AdminsDto) userDto;
-            return ResponseEntity.ok(usersService.createAdmin(adminDto));
-        } else if (userDto instanceof TechnicianDto) {
-            TechnicianDto technicianDto = (TechnicianDto) userDto;
-            return ResponseEntity.ok(usersService.createTechnician(technicianDto));
-        } else {
-            throw new IllegalArgumentException("try anther");
-        }
-    }
+
+
+//    @PostMapping("/create")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    public ResponseEntity<UsersDto> createUser(@RequestBody UsersDto userDto) {
+//        if (userDto instanceof AdminsDto) {
+//            AdminsDto adminDto = (AdminsDto) userDto;
+//            return ResponseEntity.ok(usersService.createAdmin(adminDto));
+//        } else if (userDto instanceof TechnicianDto) {
+//            TechnicianDto technicianDto = (TechnicianDto) userDto;
+//            return ResponseEntity.ok(usersService.createTechnician(technicianDto));
+//        } else {
+//            throw new IllegalArgumentException("try anther");
+//        }
+//    }
 
     @PutMapping("/admins/{id}")
     @PreAuthorize("hasRole('ADMIN')")

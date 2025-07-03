@@ -14,7 +14,8 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper(config = MapStructConfig.class,
         uses = DateMapper.class,
-        injectionStrategy = InjectionStrategy.CONSTRUCTOR)
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        subclassExhaustiveStrategy = SubclassExhaustiveStrategy.RUNTIME_EXCEPTION)
 public interface UsersMapper {
 
     // Entity → DTO

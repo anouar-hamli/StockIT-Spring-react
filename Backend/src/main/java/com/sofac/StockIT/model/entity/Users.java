@@ -48,4 +48,7 @@ public class Users {
 
     @Column(name = "date_action", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime dateAction;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 }
