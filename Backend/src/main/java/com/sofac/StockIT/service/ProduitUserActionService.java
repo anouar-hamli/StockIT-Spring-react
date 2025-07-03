@@ -31,9 +31,9 @@ public class ProduitUserActionService {
     private final RepoUsers userRepository;
     private final RepoProduit produitRepository;
 
-    /**
-     * Logs a product action with manual user and product IDs
-     */
+
+    //Logs a product action with manual user and product IDs
+
     @Transactional
     public void logUserAction(Long userId, Long produitId, TypeAction actionType) {
         Users user = getUserById(userId);
@@ -41,18 +41,19 @@ public class ProduitUserActionService {
         saveAction(createAction(user, produit, actionType));
     }
 
-    /**
-     * Logs a product action using the currently authenticated user
-     */
+
+
+     // Logs a product action using the currently authenticated user
+
     @Transactional
     public void logProduitAction(Produit produit, TypeAction actionType) {
         Users user = getCurrentUser();
         saveAction(createAction(user, produit, actionType));
     }
 
-    /**
-     * Logs bulk actions for multiple products
-     */
+
+     // Logs bulk actions for multiple products
+
     @Transactional
     public void logBulkActions(List<Long> produitIds, TypeAction actionType) {
         Users user = getCurrentUser();

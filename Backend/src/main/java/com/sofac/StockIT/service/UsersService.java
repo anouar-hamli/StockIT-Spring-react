@@ -29,11 +29,17 @@ import java.util.Optional;
 public class UsersService {
     private final RepoUsers userRepository;
     private final UsersMapper usersMapper;
+    private final PasswordEncoder passwordEncoder;
 
     public List<UsersDto> getAllUsers() {
         return userRepository.findAll().stream()
                 .map(usersMapper::toDto)
                 .toList();
+    }
+    public UsersDto getUserByEmail(String email) {
+        Users users =userRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return usersMapper.toDto(users);
     }
     public UsersDto getUserById(Long id) {
         Users user = userRepository.findById(id)
@@ -63,6 +69,7 @@ public class UsersService {
 
         Admins admin = usersMapper.toAdminsEntity(adminDto);
         admin.setDateAction(LocalDateTime.now());
+        admin.setMotDePasse(passwordEncoder.encode(adminDto.getMotDePasse()));
         Admins savedAdmin = userRepository.save(admin);
         return usersMapper.toAdminsDto(savedAdmin);
     }
@@ -73,9 +80,11 @@ public class UsersService {
 
         Technician technician = usersMapper.toTechnicianEntity(technicianDto);
         technician.setDateAction(LocalDateTime.now());
+        technician.setMotDePasse(passwordEncoder.encode(technicianDto.getMotDePasse()));
         Technician savedTechnician = userRepository.save(technician);
         return usersMapper.toTechnicianDto(savedTechnician);
     }
+
     public AdminsDto updateAdmin(Long id, AdminsDto adminDto) {
         Admins existingAdmin = (Admins) userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("Admin not found"));

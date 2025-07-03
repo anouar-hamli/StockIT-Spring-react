@@ -34,12 +34,11 @@ public interface UsersMapper {
     Users toEntity(UsersDto dto);
 
     // Required mapping methods
-    @Mapping(target = "motDePasse", ignore = true)
-    @Mapping(target = "dateAction", ignore = true)
+    @Mapping(target = "dateAction",ignore = true)
     Admins toAdminsEntity(AdminsDto dto);
 
-    @Mapping(target = "motDePasse", ignore = true)
-    @Mapping(target = "dateAction", ignore = true)
+
+    @Mapping(target = "dateAction",ignore = true)
     Technician toTechnicianEntity(TechnicianDto dto);
 
     // Update methods

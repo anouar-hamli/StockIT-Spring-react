@@ -44,6 +44,11 @@ public class Produit {
 
     @Column(name = "date_acquisition", nullable = false)
     private LocalDate dateAcquisition;
+    @PrePersist
+    public void prePersist() {
+        this.dateAcquisition = LocalDate.now();
+    }
+
 
     @Column(name = "affectation", nullable = false)
     private String affectation;

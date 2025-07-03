@@ -1,5 +1,6 @@
 package com.sofac.StockIT.Controller.pages;
 
+import com.sofac.StockIT.model.dto.HistoriqueDto;
 import com.sofac.StockIT.model.dto.ProduitDto;
 import com.sofac.StockIT.model.entity.Category;
 import com.sofac.StockIT.model.entity.StatusProduit;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/produits")
@@ -118,6 +120,13 @@ public class ProduitController {
         return produitService.getHorsServiceProduits();
     }
 
-
+    @GetMapping("/{produitId}/historique")
+    public List<HistoriqueDto> getProduitHistory(@PathVariable Long produitId){
+        return produitService.getProduitHistory(produitId);
+    }
+    @GetMapping("/statistiques")
+    public Map<String, Long> getProduitStatistics() {
+        return produitService.getProduitStatistics();
+    }
 
 }

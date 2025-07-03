@@ -4,6 +4,7 @@ import com.sofac.StockIT.model.dto.AdminsDto;
 import com.sofac.StockIT.model.dto.TechnicianDto;
 import com.sofac.StockIT.model.dto.UsersDto;
 import com.sofac.StockIT.service.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UsersController {
@@ -32,6 +33,13 @@ public class UsersController {
     public ResponseEntity<List<TechnicianDto>> getAllTechnicians() {
         return ResponseEntity.ok(usersService.getAllTechnicians());
     }
+
+    @GetMapping("/by-email")
+    @Operation(summary="get user by email")
+    public UsersDto getUserByEmail(@RequestParam("email") String email) {
+        return usersService.getUserByEmail(email);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<UsersDto> getUserById(@PathVariable Long id) {
         return ResponseEntity.ok(usersService.getUserById(id));
@@ -58,6 +66,19 @@ public class UsersController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<TechnicianDto> createTechnician(@RequestBody TechnicianDto technicianDto) {
         return ResponseEntity.ok(usersService.createTechnician(technicianDto));
+    }
+    @PostMapping("/create")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<UsersDto> createUser(@RequestBody UsersDto userDto) {
+        if (userDto instanceof AdminsDto) {
+            AdminsDto adminDto = (AdminsDto) userDto;
+            return ResponseEntity.ok(usersService.createAdmin(adminDto));
+        } else if (userDto instanceof TechnicianDto) {
+            TechnicianDto technicianDto = (TechnicianDto) userDto;
+            return ResponseEntity.ok(usersService.createTechnician(technicianDto));
+        } else {
+            throw new IllegalArgumentException("try anther");
+        }
     }
 
     @PutMapping("/admins/{id}")
@@ -87,6 +108,5 @@ public class UsersController {
     public ResponseEntity<List<UsersDto>> searchUsers(@RequestParam String query) {
         return ResponseEntity.ok(usersService.searchUsers(query));
     }
-
 
 }

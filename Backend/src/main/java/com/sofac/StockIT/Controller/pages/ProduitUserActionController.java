@@ -1,10 +1,13 @@
 package com.sofac.StockIT.Controller.pages;
 
+import com.sofac.StockIT.Repository.RepoProduit;
 import com.sofac.StockIT.model.dto.ProduitUserActionDto;
+import com.sofac.StockIT.model.entity.Produit;
 import com.sofac.StockIT.model.entity.TypeAction;
 import com.sofac.StockIT.service.ProduitUserActionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import java.util.List;
 public class ProduitUserActionController {
 
     private final ProduitUserActionService actionService;
+    private final RepoProduit produitRepo;
 
     @PostMapping("/log/{userId}/{produitId}/{actionType}")
     @Operation(summary = "Log a product action")
@@ -29,6 +33,17 @@ public class ProduitUserActionController {
             @PathVariable Long produitId,
             @PathVariable TypeAction actionType) {
         actionService.logUserAction(userId, produitId, actionType);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/log/current-user/{produitId}/{actionType}")
+    @Operation(summary = "Log a product action for the current authenticated user")
+    public ResponseEntity<Void> logActionForCurrentUser(
+            @PathVariable Long produitId,
+            @PathVariable TypeAction actionType) {
+        Produit produit = produitRepo.findById(produitId)
+                .orElseThrow(() -> new EntityNotFoundException("Produit not found: " + produitId));
+
+        actionService.logProduitAction(produit, actionType);
         return ResponseEntity.ok().build();
     }
 
@@ -72,4 +87,5 @@ public class ProduitUserActionController {
         actionService.logBulkActions(produitIds, actionType);
         return ResponseEntity.ok().build();
     }
+
 }
